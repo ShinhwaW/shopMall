@@ -1,8 +1,9 @@
 package cn.shinhwa.pinyougou.sellergoods.service;
 
-import java.util.List;
-
 import cn.shinhwa.pinyougou.pojo.TbBrand;
+import entity.PageResult;
+
+import java.util.List;
 
 /**
  * 品牌接口
@@ -12,5 +13,6 @@ import cn.shinhwa.pinyougou.pojo.TbBrand;
 public interface BrandService {
 
 	public List<TbBrand> findAll();
-	
+
+	public PageResult findPage(int pageNum,int pageSize);
 }
