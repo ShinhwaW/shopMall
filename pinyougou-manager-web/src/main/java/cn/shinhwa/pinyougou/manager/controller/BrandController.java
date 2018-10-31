@@ -45,16 +45,28 @@ public class BrandController {
     public Result update(@RequestBody TbBrand brand) {
         try {
             brandService.update(brand);
-            return new Result(true,"修改成功！");
+            return new Result(true, "修改成功！");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"修改失败！");
+            return new Result(false, "修改失败！");
 
         }
     }
 
     @RequestMapping("/findOne")
-    public TbBrand findOne(long id){
+    public TbBrand findOne(long id) {
         return brandService.findOne(id);
+    }
+
+    @RequestMapping("/delete")
+    public Result delete(Long[] ids) {
+        try {
+            brandService.delete(ids);
+            return new Result(true, "删除成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "删除失败！");
+
+        }
     }
 }
