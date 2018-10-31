@@ -8,6 +8,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 @Service
@@ -27,6 +28,11 @@ public class BrandServiceImpl implements BrandService {
 		PageHelper.startPage(pageNum,pageSize);
 		Page<TbBrand> page = (Page<TbBrand>) brandMapper.selectByExample(null);
 		return new PageResult(page.getTotal(),page.getResult());
+	}
+
+	@Override
+	public void add(TbBrand tbBrand) {
+		brandMapper.insert(tbBrand);
 	}
 
 }
