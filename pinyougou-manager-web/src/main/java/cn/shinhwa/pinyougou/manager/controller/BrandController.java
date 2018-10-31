@@ -27,17 +27,34 @@ public class BrandController {
     public PageResult findPage(int page, int size) {
         return brandService.findPage(page, size);
     }
+
     @RequestMapping("/add")
-    public Result add(@RequestBody TbBrand brand){
+    public Result add(@RequestBody TbBrand brand) {
 
         try {
             brandService.add(brand);
-            return new Result(true,"添加成功！");
+            return new Result(true, "添加成功！");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(true,"添加失败！");
+            return new Result(false, "添加失败！");
         }
 
     }
 
+    @RequestMapping("/update")
+    public Result update(@RequestBody TbBrand brand) {
+        try {
+            brandService.update(brand);
+            return new Result(true,"修改成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"修改失败！");
+
+        }
+    }
+
+    @RequestMapping("/findOne")
+    public TbBrand findOne(long id){
+        return brandService.findOne(id);
+    }
 }
