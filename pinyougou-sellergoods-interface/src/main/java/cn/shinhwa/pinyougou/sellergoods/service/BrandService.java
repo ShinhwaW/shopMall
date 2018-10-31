@@ -23,4 +23,7 @@ public interface BrandService {
 	public TbBrand findOne(Long id);
 
 	public void delete(Long[] ids);
+
+	public PageResult findPage(TbBrand brand,int pageNum,int pageSize);
+
 }

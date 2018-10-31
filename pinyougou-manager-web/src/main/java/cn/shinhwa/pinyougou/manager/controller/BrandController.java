@@ -66,7 +66,12 @@ public class BrandController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "删除失败！");
-
         }
     }
+
+    @RequestMapping("/search")
+    public PageResult search(@RequestBody TbBrand brand,int page,int rows){
+        return brandService.findPage(brand,page,rows);
+    }
+
 }

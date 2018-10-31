@@ -2,6 +2,7 @@ package cn.shinhwa.pinyougou.sellergoods.service.impl;
 
 import cn.shinhwa.pinyougou.mapper.TbBrandMapper;
 import cn.shinhwa.pinyougou.pojo.TbBrand;
+import cn.shinhwa.pinyougou.pojo.TbBrandExample;
 import cn.shinhwa.pinyougou.sellergoods.service.BrandService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -50,6 +51,24 @@ public class BrandServiceImpl implements BrandService {
         for (Long id : ids) {
             brandMapper.deleteByPrimaryKey(id);
         }
+    }
+
+    @Override
+    public PageResult findPage(TbBrand brand, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        TbBrandExample example = new TbBrandExample();
+        TbBrandExample.Criteria criteria = example.createCriteria();
+        if (brand != null) {
+            if (brand.getName() != null && !"".equals(brand.getName())) {
+                criteria.andNameLike("%" + brand.getName() + "%");
+            }
+            if (brand.getFirstChar() != null && !"".equals(brand.getFirstChar())){
+                criteria.andFirstCharEqualTo(brand.getFirstChar());
+            }
+        }
+        Page<TbBrand> page = (Page<TbBrand>) brandMapper.selectByExample(example);
+
+        return new PageResult(page.getTotal(),page.getResult());
     }
 
 }
