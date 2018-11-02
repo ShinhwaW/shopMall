@@ -18,105 +18,10 @@
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
     <!-- 分页组件结束 -->
 
-    <script type="text/javascript">
-        var app = angular.module('pinyougou', ['pagination']);
-        app.controller('brandController', function ($scope, $http) {
-            $scope.findAll = function () {
-                $http.get('../brand/findAll.do').success(
-                    function (response) {
-                        $scope.list = response;
-                    }
-                )
-            };
-
-            //分页控件配置currentPage:当前页   totalItems :总记录数  itemsPerPage:每页记录数  perPageOptions :分页选项  onChange:当页码变更后自动触发的方法
-            $scope.paginationConf = {
-
-                currentPage: 1,
-                totalItems: 10,
-                itemsPerPage: 10,
-                perPageOptions: [10, 20, 30, 40, 50],
-                onChange: function () {
-                    $scope.reloadList();
-                }
-            };
-
-            //刷新列表
-            $scope.reloadList = function () {
-                $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-            };
-
-            //分页
-            $scope.findPage = function (page, size) {
-                $http.get('../brand/findPage.do?page=' + page + '&size=' + size).success(
-                    function (response) {
-                        $scope.list = response.rows;//显示当前页数据
-                        $scope.paginationConf.totalItems = response.total;//更新总记录数
-                    }
-                );
-            };
-
-            $scope.save = function () {
-
-                var methodName = 'add';
-                if ($scope.entity.id != null) {
-                    methodName = 'update';
-                }
-                //因为是对象类型,所以用post
-                $http.post('../brand/' + methodName + '.do', $scope.entity).success(function (response) {
-                    if (response.success) {
-                        $scope.reloadList();
-                    } else {
-                        alert(response.message);
-                    }
-                })
-            };
-
-            $scope.findOne = function (id) {
-                $http.get('../brand/findOne.do?id=' + id).success(function (response) {
-                    $scope.entity = response;
-                })
-            };
-
-            $scope.selectIds = [];
-
-            $scope.updateSelection = function ($event, id) {
-                if ($event.target.checked) {
-                    $scope.selectIds.push(id);
-                } else {
-                    var index = $scope.selectIds.indexOf(id);
-                    $scope.selectIds.splice(index, 1);
-                }
-            };
-
-            $scope.delete = function () {
-                
-                if (confirm("确定删除吗?")) {
-                    //基本数据类型,所以用get就可以
-                    $http.get('../brand/delete.do?ids=' + $scope.selectIds).success(function (response) {
-                        if (response.success) {
-                            $scope.reloadList();
-                        } else {
-                            alert(response.message);
-                        }
-                    })
-                }
-
-            };
-
-            $scope.searchEntity = {};
-
-            $scope.search = function (page, rows) {
-                $http.post('../brand/search.do?page=' + page + "&rows=" + rows, $scope.searchEntity).success(function (response) {
-                        $scope.list = response.rows;//显示当前页数据
-                        $scope.paginationConf.totalItems = response.total;//更新总记录数
-                })
-            };
-
-        });
-
-
-    </script>
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/service/brandService.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/brandController.js"></script>
 
 </head>
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController">
@@ -149,8 +54,10 @@
         </div>
         <div class="box-tools pull-right">
             <div class="has-feedback">
-                品牌名称:<input ng-model="searchEntity.name"> 品牌首字母:<input ng-model="searchEntity.firstChar"> <button
-                    ng-click="reloadList()"><i class="fa fa-file-o"></i> 查询</button>
+                品牌名称:<input ng-model="searchEntity.name"> 品牌首字母:<input ng-model="searchEntity.firstChar">
+                <button
+                        ng-click="reloadList()"><i class="fa fa-file-o"></i> 查询
+                </button>
             </div>
         </div>
         <!--工具栏/-->
