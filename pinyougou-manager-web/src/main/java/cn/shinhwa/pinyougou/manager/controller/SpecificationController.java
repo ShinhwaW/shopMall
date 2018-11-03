@@ -1,6 +1,7 @@
 package cn.shinhwa.pinyougou.manager.controller;
 
 import cn.shinhwa.pinyougou.pojo.TbSpecification;
+import cn.shinhwa.pinyougou.pojogroup.Specification;
 import cn.shinhwa.pinyougou.sellergoods.service.SpecificationService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
@@ -47,7 +48,7 @@ public class SpecificationController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody TbSpecification specification){
+	public Result add(@RequestBody Specification specification){
 		try {
 			specificationService.add(specification);
 			return new Result(true, "增加成功");
@@ -110,5 +111,7 @@ public class SpecificationController {
 	public PageResult search(@RequestBody TbSpecification specification, int page, int rows  ){
 		return specificationService.findPage(specification, page, rows);		
 	}
+
+
 	
 }

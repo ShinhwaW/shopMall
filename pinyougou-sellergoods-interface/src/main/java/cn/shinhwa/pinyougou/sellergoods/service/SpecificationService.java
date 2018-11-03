@@ -1,8 +1,9 @@
 package cn.shinhwa.pinyougou.sellergoods.service;
-import java.util.List;
 import cn.shinhwa.pinyougou.pojo.TbSpecification;
-
+import cn.shinhwa.pinyougou.pojogroup.Specification;
 import entity.PageResult;
+
+import java.util.List;
 /**
  * 服务层接口
  * @author Administrator
@@ -57,5 +58,10 @@ public interface SpecificationService {
 	 * @return
 	 */
 	public PageResult findPage(TbSpecification specification, int pageNum, int pageSize);
+
+	/*
+	 *规格和规格选项添加组
+	 */
+	public void add(Specification specification);
 	
 }
