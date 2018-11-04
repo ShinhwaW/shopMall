@@ -34,7 +34,7 @@ public interface SpecificationService {
 	/**
 	 * 修改
 	 */
-	public void update(TbSpecification specification);
+	public void update(Specification specification);
 	
 
 	/**
@@ -42,7 +42,7 @@ public interface SpecificationService {
 	 * @param id
 	 * @return
 	 */
-	public TbSpecification findOne(Long id);
+	public Specification findOne(Long id);
 	
 	
 	/**
@@ -63,5 +63,5 @@ public interface SpecificationService {
 	 *规格和规格选项添加组
 	 */
 	public void add(Specification specification);
-	
+
 }

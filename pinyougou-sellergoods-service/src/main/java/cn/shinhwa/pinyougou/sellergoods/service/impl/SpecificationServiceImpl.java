@@ -6,6 +6,7 @@ import cn.shinhwa.pinyougou.pojo.TbSpecification;
 import cn.shinhwa.pinyougou.pojo.TbSpecificationExample;
 import cn.shinhwa.pinyougou.pojo.TbSpecificationExample.Criteria;
 import cn.shinhwa.pinyougou.pojo.TbSpecificationOption;
+import cn.shinhwa.pinyougou.pojo.TbSpecificationOptionExample;
 import cn.shinhwa.pinyougou.pojogroup.Specification;
 import cn.shinhwa.pinyougou.sellergoods.service.SpecificationService;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -61,8 +62,16 @@ public class SpecificationServiceImpl implements SpecificationService {
      * 修改
      */
     @Override
-    public void update(TbSpecification specification) {
-        specificationMapper.updateByPrimaryKey(specification);
+    public void update(Specification specification) {
+        specificationMapper.updateByPrimaryKey(specification.getSpecification());
+        TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+        TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+        criteria.andSpecIdEqualTo(specification.getSpecification().getId());
+        specificationOptionMapper.deleteByExample(example);
+        for (TbSpecificationOption specificationOption:specification.getSpecificationOptionList()){
+            specificationOption.setSpecId(specification.getSpecification().getId());
+            specificationOptionMapper.insert(specificationOption);
+        }
     }
 
     /**
@@ -72,8 +81,15 @@ public class SpecificationServiceImpl implements SpecificationService {
      * @return
      */
     @Override
-    public TbSpecification findOne(Long id) {
-        return specificationMapper.selectByPrimaryKey(id);
+    public Specification findOne(Long id) {
+
+        TbSpecification tbSpecification = specificationMapper.selectByPrimaryKey(id);
+        TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+        TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+        criteria.andSpecIdEqualTo(id);
+        List<TbSpecificationOption> tbSpecificationOptionList = specificationOptionMapper.selectByExample(example);
+
+        return new Specification(tbSpecification,tbSpecificationOptionList);
     }
 
     /**
@@ -83,6 +99,10 @@ public class SpecificationServiceImpl implements SpecificationService {
     public void delete(Long[] ids) {
         for (Long id : ids) {
             specificationMapper.deleteByPrimaryKey(id);
+            TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+            TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+            criteria.andSpecIdEqualTo(id);
+            specificationOptionMapper.deleteByExample(example);
         }
     }
 

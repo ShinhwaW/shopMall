@@ -26,4 +26,12 @@ public class Specification implements Serializable {
     public void setSpecificationOptionList(List<TbSpecificationOption> specificationOptionList) {
         this.specificationOptionList = specificationOptionList;
     }
+
+    public Specification() {
+    }
+
+    public Specification(TbSpecification specification, List<TbSpecificationOption> specificationOptionList) {
+        this.specification = specification;
+        this.specificationOptionList = specificationOptionList;
+    }
 }

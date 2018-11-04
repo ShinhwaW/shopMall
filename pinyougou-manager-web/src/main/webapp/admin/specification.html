@@ -41,7 +41,8 @@
                             ng-click="entity={'specificationOptionList':[]}"><i
                             class="fa fa-file-o"></i> 新建
                     </button>
-                    <button type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除
+                    </button>
 
                     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                             class="fa fa-refresh"></i> 刷新
@@ -61,7 +62,7 @@
             <thead>
             <tr>
                 <th class="" style="padding-right:0px">
-                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    <!--<input id="selall" type="checkbox" class="icheckbox_square-blue">-->
                 </th>
                 <th class="sorting_asc">规格ID</th>
                 <th class="sorting">规格名称</th>
@@ -70,10 +71,13 @@
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
+                <td><input  type="checkbox" ng-click="updateSelection($event, entity.id)"></td>
                 <td>{{entity.id}}</td>
                 <td>{{entity.specName}}</td>
                 <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改</button>
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                            ng-click="findOne(entity.id)">修改
+                    </button>
                 </td>
             </tr>
 
