@@ -2,8 +2,10 @@ package cn.shinhwa.pinyougou.mapper;
 
 import cn.shinhwa.pinyougou.pojo.TbBrand;
 import cn.shinhwa.pinyougou.pojo.TbBrandExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface TbBrandMapper {
     int countByExample(TbBrandExample example);
@@ -27,4 +29,6 @@ public interface TbBrandMapper {
     int updateByPrimaryKeySelective(TbBrand record);
 
     int updateByPrimaryKey(TbBrand record);
+
+    List<Map> selectOptionList();
 }

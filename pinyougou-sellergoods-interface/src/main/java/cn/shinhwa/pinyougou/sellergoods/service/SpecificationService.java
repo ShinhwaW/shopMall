@@ -4,6 +4,8 @@ import cn.shinhwa.pinyougou.pojogroup.Specification;
 import entity.PageResult;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -63,5 +65,7 @@ public interface SpecificationService {
 	 *规格和规格选项添加组
 	 */
 	public void add(Specification specification);
+
+	public List<Map> selectOptionList();
 
 }
