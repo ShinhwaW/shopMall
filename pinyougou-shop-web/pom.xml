@@ -14,6 +14,7 @@
     <packaging>war</packaging>
 
     <name>pinyougou-shop-web Maven Webapp</name>
+
     <dependencies>
         <!-- Spring -->
         <dependency>
@@ -82,10 +83,28 @@
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>cn.shinhwa</groupId>
+            <artifactId>pinyougou-sellergoods-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 身份验证 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
 
     </dependencies>
-
 
     <build>
         <plugins>
