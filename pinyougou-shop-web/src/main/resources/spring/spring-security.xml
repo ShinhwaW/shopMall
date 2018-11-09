@@ -12,7 +12,7 @@
     <http pattern="/img/**" security="none"/>
     <http pattern="/js/**" security="none"/>
     <http pattern="/plugins/**" security="none"/>
-    <http pattern="/seller/add.do" security="none"></http>
+    <http pattern="/seller/add.do" security="none"/>
 
     <!-- 页面的拦截规则    use-expressions:是否启动SPEL表达式 默认是true -->
     <http use-expressions="false">
@@ -32,17 +32,21 @@
     <!-- 认证管理器 -->
     <authentication-manager>
         <authentication-provider user-service-ref="userDetailService">
+            <password-encoder ref="bcryptEncoder"/>
         </authentication-provider>
     </authentication-manager>
 
+    <beans:bean id="userDetailService" class="cn.shinhwa.pinyougou.shop.service.UserDetailsServiceImpl">
+        <beans:property name="sellerService" ref="sellerService"/>
+    </beans:bean>
 
     <!-- 引用dubbo 服务 -->
     <dubbo:application name="pinyougou-shop-web"/>
     <dubbo:registry address="zookeeper://192.168.25.129:2181"/>
     <dubbo:reference id="sellerService" interface="cn.shinhwa.pinyougou.sellergoods.service.SellerService">
     </dubbo:reference>
-    <beans:bean id="userDetailService" class="cn.shinhwa.pinyougou.shop.service.UserDetailsServiceImpl">
-        <beans:property name="sellerService" ref="sellerService"/>
-    </beans:bean>
+
+    <beans:bean id="bcryptEncoder"
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
 </beans:beans>
