@@ -1,6 +1,7 @@
 package cn.shinhwa.pinyougou.manager.controller;
 
 import cn.shinhwa.pinyougou.pojo.TbItem;
+import cn.shinhwa.pinyougou.pojo.TbItemCat;
 import cn.shinhwa.pinyougou.sellergoods.service.ItemService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
@@ -110,5 +111,5 @@ public class ItemController {
 	public PageResult search(@RequestBody TbItem item, int page, int rows  ){
 		return itemService.findPage(item, page, rows);		
 	}
-	
+
 }
