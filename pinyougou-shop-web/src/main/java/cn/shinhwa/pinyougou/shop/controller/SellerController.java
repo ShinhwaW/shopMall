@@ -55,7 +55,7 @@ public class SellerController {
     public Result add(@RequestBody TbSeller seller) {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String password = passwordEncoder.encode(seller.getPassword());
+        String password = passwordEncoder.encode(seller.getPassword().trim());
         seller.setPassword(password);
 
         try {
