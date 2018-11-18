@@ -1,5 +1,5 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, uploadService) {
+app.controller('goodsController', function ($scope, $controller, goodsService, uploadService, itemCatService) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -110,9 +110,28 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     }
 
     //列表中移除图片
-    $scope.remove_image_entity=function(index){
-        $scope.entity.goodsDesc.itemImages.splice(index,1);
+    $scope.remove_image_entity = function (index) {
+        $scope.entity.goodsDesc.itemImages.splice(index, 1);
     }
 
+    $scope.selectItemCatFirstList = function () {
+        itemCatService.findByParentId(0).success(function (response) {
+            $scope.itemCatFirstList = response;
+        })
+    }
+
+    // $watch方法用于监控某个变量的值，当被监控的值发生变化，就自动执行相应的函数。
+    $scope.$watch('entity.goods.category1_id', function (newValue, oldValue) {
+        itemCatService.findByParentId(newValue).success(function (response) {
+            $scope.itemCatSecondList = response;
+        })
+
+    });
+
+    $scope.$watch('entity.goods.category2_id',function (newValue,oldValue) {
+        itemCatService.findByParentId(newValue).success(function (response) {
+            $scope.itemCatThirdList=response;
+        })
+    });
 
 });	

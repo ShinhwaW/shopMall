@@ -26,13 +26,15 @@
     <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/service/goodsService.js"></script>
     <script type="text/javascript" src="../js/service/uploadService.js"></script>
+    <script type="text/javascript" src="../js/service/itemCatService.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
     <script type="text/javascript" src="../js/controller/goodsController.js"></script>
 
 
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController"
+      ng-init="selectItemCatFirstList()">
 
 <!-- 正文区域 -->
 <section class="content">
@@ -71,14 +73,18 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <select class="form-control">
+                                        <!--使用select2也可以实现，这里使用anguarJs 原生数据源实现-->
+                                        <select class="form-control" ng-model="entity.goods.category1_id"
+                                                ng-options="itemCat.id as itemCat.name for itemCat in itemCatFirstList">
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control select-sm"></select>
+                                        <select class="form-control select-sm" ng-model="entity.goods.category2_id"
+                                                ng-options="itemCat.id as itemCat.name for itemCat in itemCatSecondList"></select>
                                     </td>
                                     <td>
-                                        <select class="form-control select-sm"></select>
+                                        <select class="form-control select-sm" ng-model="entity.goods.category3_id"
+                                                ng-options="itemCat.id as itemCat.name for itemCat in itemCatThirdList"></select>
                                     </td>
                                     <td>
                                         模板ID:19
