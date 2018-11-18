@@ -3,6 +3,7 @@ package cn.shinhwa.pinyougou.shop.controller;
 import cn.shinhwa.pinyougou.pojo.TbGoods;
 import cn.shinhwa.pinyougou.pojogroup.Goods;
 import cn.shinhwa.pinyougou.sellergoods.service.GoodsService;
+import cn.shinhwa.pinyougou.sellergoods.service.TypeTemplateService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
 import entity.Result;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -24,6 +26,7 @@ public class GoodsController {
 
     @Reference
     private GoodsService goodsService;
+
 
     /**
      * 返回全部列表

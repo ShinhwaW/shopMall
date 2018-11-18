@@ -1,4 +1,4 @@
-package cn.shinhwa.pinyougou.manager.controller;
+package cn.shinhwa.pinyougou.shop.controller;
 
 import cn.shinhwa.pinyougou.pojo.TbTypeTemplate;
 import cn.shinhwa.pinyougou.sellergoods.service.TypeTemplateService;
@@ -113,4 +113,9 @@ public class TypeTemplateController {
 		return typeTemplateService.findPage(typeTemplate, page, rows);		
 	}
 
+	@RequestMapping("/findSpecList")
+	public List<Map> findSpecList(Long id){
+		return typeTemplateService.findSpecList(id);
+	}
+	
 }

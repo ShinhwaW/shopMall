@@ -1,8 +1,10 @@
 package cn.shinhwa.pinyougou.sellergoods.service;
-import java.util.List;
 import cn.shinhwa.pinyougou.pojo.TbTypeTemplate;
-
 import entity.PageResult;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -57,5 +59,7 @@ public interface TypeTemplateService {
 	 * @return
 	 */
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize);
-	
+
+	public List<Map> findSpecList(Long id);
+
 }
