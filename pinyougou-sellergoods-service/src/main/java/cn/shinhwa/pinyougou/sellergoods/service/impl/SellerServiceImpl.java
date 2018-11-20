@@ -1,4 +1,5 @@
 package cn.shinhwa.pinyougou.sellergoods.service.impl;
+
 import cn.shinhwa.pinyougou.mapper.TbSellerMapper;
 import cn.shinhwa.pinyougou.pojo.TbSeller;
 import cn.shinhwa.pinyougou.pojo.TbSellerExample;
@@ -9,6 +10,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
  *
  */
 @Service
+@Transactional
 public class SellerServiceImpl implements SellerService {
 
 	@Autowired

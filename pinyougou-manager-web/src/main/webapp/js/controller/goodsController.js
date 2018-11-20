@@ -60,6 +60,8 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                 if (response.success) {
                     $scope.reloadList();//刷新列表
                     $scope.selectIds = [];
+                }else {
+                    alert(response.message);
                 }
             }
         );
