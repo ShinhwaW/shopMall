@@ -1,6 +1,7 @@
 package cn.shinhwa.pinyougou.manager.controller;
 
 import cn.shinhwa.pinyougou.pojo.TbGoods;
+import cn.shinhwa.pinyougou.pojogroup.Goods;
 import cn.shinhwa.pinyougou.sellergoods.service.GoodsService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import entity.PageResult;
@@ -63,7 +64,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods){
+	public Result update(@RequestBody Goods goods){
 		try {
 			goodsService.update(goods);
 			return new Result(true, "修改成功");
@@ -79,7 +80,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbGoods findOne(Long id){
+	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
 	

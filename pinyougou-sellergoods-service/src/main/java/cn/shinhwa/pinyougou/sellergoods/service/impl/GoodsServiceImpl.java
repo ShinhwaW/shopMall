@@ -74,8 +74,19 @@ public class GoodsServiceImpl implements GoodsService {
      * 修改
      */
     @Override
-    public void update(TbGoods goods) {
-        goodsMapper.updateByPrimaryKey(goods);
+    public void update(Goods goods) {
+
+        goods.getGoods().setAuditStatus("0");//设置未申请状态:如果是经过修改的商品，需要重新设置状态
+        goodsMapper.updateByPrimaryKey(goods.getGoods());//保存商品表
+        goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());//保存商品扩展表
+        //删除原有的sku列表数据
+        TbItemExample example=new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(goods.getGoods().getId());
+        itemMapper.deleteByExample(example);
+        //添加新的sku列表数据
+        saveItemList(goods);//插入商品SKU列表数据
+
     }
 
     /**
@@ -85,8 +96,21 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public TbGoods findOne(Long id) {
-        return goodsMapper.selectByPrimaryKey(id);
+    public Goods findOne(Long id) {
+
+        Goods goods = new Goods();
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+        goods.setGoods(tbGoods);
+        TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+        goods.setGoodsDesc(tbGoodsDesc);
+
+        //查询SKU商品列表
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(id);
+        List<TbItem> itemsList = itemMapper.selectByExample(example);
+        goods.setItemList(itemsList);
+        return goods;
     }
 
     /**
@@ -149,6 +173,10 @@ public class GoodsServiceImpl implements GoodsService {
         goodsMapper.insert(goods.getGoods());    //插入商品表
         goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
         goodsDescMapper.insert(goods.getGoodsDesc());//插入商品扩展数据
+        saveItemList(goods);
+    }
+
+    private void saveItemList(Goods goods) {
         if ("1".equals(goods.getGoods().getIsEnableSpec())) {
             for (TbItem item : goods.getItemList()) {
                 //标题
@@ -158,7 +186,7 @@ public class GoodsServiceImpl implements GoodsService {
                     title += " " + specMap.get(key);
                 }
                 item.setTitle(title);
-                setItemValus(goods, item);
+                setItemValues(goods, item);
                 itemMapper.insert(item);
             }
         } else {
@@ -169,12 +197,12 @@ public class GoodsServiceImpl implements GoodsService {
             item.setIsDefault("1");//是否默认
             item.setNum(99999);//库存数量
             item.setSpec("{}");
-            setItemValus(goods, item);
+            setItemValues(goods, item);
             itemMapper.insert(item);
         }
     }
 
-    private void setItemValus(Goods goods, TbItem item) {
+    private void setItemValues(Goods goods, TbItem item) {
         item.setGoodsId(goods.getGoods().getId());//商品SPU编号
         item.setSellerId(goods.getGoods().getSellerId());//商家编号
         item.setCategoryid(goods.getGoods().getCategory3Id());//商品分类编号（3级）
