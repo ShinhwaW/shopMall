@@ -10,12 +10,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pinyougou-sellergoods-service</artifactId>
+    <artifactId>pinyougou-content-service</artifactId>
     <packaging>war</packaging>
 
-    <name>pinyougou-sellergoods-service Maven Webapp</name>
+    <name>pinyougou-content-service Maven Webapp</name>
     <dependencies>
-
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -90,22 +89,17 @@
 
         <dependency>
             <groupId>cn.shinhwa</groupId>
-            <artifactId>pinyougou-sellergoods-interface</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.shinhwa</groupId>
             <artifactId>pinyougou-dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>cn.shinhwa</groupId>
-            <artifactId>pinyougou-common</artifactId>
+            <artifactId>pinyougou-content-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
-
 
     <build>
         <plugins>
@@ -115,12 +109,11 @@
                 <version>2.2</version>
                 <configuration>
                     <!-- 指定端口 -->
-                    <port>9001</port>
+                    <port>9002</port>
                     <!-- 请求路径 -->
                     <path>/</path>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>
