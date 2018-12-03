@@ -4,16 +4,15 @@ import cn.shinhwa.pinyougou.pojo.TbItem;
 import cn.shinhwa.pinyougou.search.service.ItemSearchService;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.Criteria;
-import org.springframework.data.solr.core.query.HighlightOptions;
-import org.springframework.data.solr.core.query.HighlightQuery;
-import org.springframework.data.solr.core.query.SimpleHighlightQuery;
-import org.springframework.data.solr.core.query.result.HighlightEntry;
-import org.springframework.data.solr.core.query.result.HighlightPage;
+import org.springframework.data.solr.core.query.*;
+import org.springframework.data.solr.core.query.result.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Transactional
@@ -27,11 +26,15 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     public Map<String, Object> search(Map searchMap) {
 
         Map map = new HashMap();
-
+        List categoryList = searchCategoryList(searchMap);
         map.putAll(searchList(searchMap));
-
+        map.put("categoryList", categoryList);
         return map;
     }
+
+    /*
+     * 根据关键字搜索列表
+     */
 
     private Map searchList(Map searchMap) {
         Map map = new HashMap();
@@ -52,5 +55,27 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         map.put("rows", page.getContent());
         return map;
     }
+
+    /*
+     *查询分类列表
+     */
+
+    private List searchCategoryList(Map searchMap) {
+        List<String> list = new ArrayList<>();
+        Query query = new SimpleQuery();
+        Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
+        query.addCriteria(criteria);
+        GroupOptions groupOptions = new GroupOptions().addGroupByField("item_category");
+        query.setGroupOptions(groupOptions);
+        GroupPage<TbItem> page = solrTemplate.queryForGroupPage(query, TbItem.class);
+        GroupResult<TbItem> groupResult = page.getGroupResult("item_category");
+        Page<GroupEntry<TbItem>> groupEntries = groupResult.getGroupEntries();
+        List<GroupEntry<TbItem>> content = groupEntries.getContent();
+        for (GroupEntry<TbItem> entry : content) {
+            list.add(entry.getGroupValue());
+        }
+        return list;
+    }
+
 
 }

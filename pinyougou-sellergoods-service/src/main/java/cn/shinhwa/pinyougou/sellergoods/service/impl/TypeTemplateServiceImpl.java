@@ -14,6 +14,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,6 +34,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Autowired
     private TbSpecificationOptionMapper specificationOptionMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 查询全部
@@ -115,6 +119,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
 
         Page<TbTypeTemplate> page = (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(example);
+        saveToRedis();
         return new PageResult(page.getTotal(), page.getResult());
     }
 
@@ -130,6 +135,19 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             map.put("options", options);
         }
         return list;
+    }
+
+
+    private void saveToRedis() {
+        List<TbTypeTemplate> typeTemplateList = findAll();
+        for (TbTypeTemplate typeTemplate : typeTemplateList) {
+            List<Map> brandList = JSON.parseArray(typeTemplate.getBrandIds(), Map.class);
+            redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(), brandList);
+            System.out.println(brandList.toString());
+            List<Map> specList = findSpecList(typeTemplate.getId());
+            System.out.println(specList.toString());
+            redisTemplate.boundHashOps("specList").put(typeTemplate.getId(), specList);
+        }
     }
 
 }
