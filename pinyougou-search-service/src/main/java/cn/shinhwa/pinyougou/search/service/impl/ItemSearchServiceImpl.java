@@ -5,6 +5,7 @@ import cn.shinhwa.pinyougou.search.service.ItemSearchService;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.*;
@@ -22,13 +23,22 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Autowired
     private SolrTemplate solrTemplate;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     public Map<String, Object> search(Map searchMap) {
 
         Map map = new HashMap();
         List categoryList = searchCategoryList(searchMap);
+        //按关键字查询（高亮显示）
         map.putAll(searchList(searchMap));
+        //查询商品分类
         map.put("categoryList", categoryList);
+        //查询品牌和规格列表
+        if (categoryList.size()>0){
+            map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+        }
         return map;
     }
 
@@ -75,6 +85,22 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             list.add(entry.getGroupValue());
         }
         return list;
+    }
+
+    /*
+     * 查询品牌和规格列表
+     */
+
+    private Map searchBrandAndSpecList(String category) {
+        Map map = new HashMap();
+        Long typeId = (Long) redisTemplate.boundHashOps("itemCat").get(category);
+        if (typeId != null){
+            List brandList = (List) redisTemplate.boundHashOps("brandList").get(typeId);
+            map.put("brandList",brandList);
+            List specList = (List) redisTemplate.boundHashOps("specList").get(typeId);
+            map.put("specList",specList);
+        }
+        return map;
     }
 
 

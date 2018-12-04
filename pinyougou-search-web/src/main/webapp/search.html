@@ -180,28 +180,14 @@
                 </div>
                 <div class="fl ext"></div>
             </div>
-            <div class="type-wrap logo">
+            <div class="type-wrap logo" nf-if="resultMap.brandList!=null">
                 <div class="fl key brand">品牌</div>
                 <div class="value logos">
                     <ul class="logo-list">
-                        <li><img src="img/_/phone01.png"/></li>
-                        <li><img src="img/_/phone02.png"/></li>
-                        <li><img src="img/_/phone03.png"/></li>
-                        <li><img src="img/_/phone04.png"/></li>
-                        <li><img src="img/_/phone05.png"/></li>
-                        <li><img src="img/_/phone06.png"/></li>
-                        <li><img src="img/_/phone07.png"/></li>
-                        <li><img src="img/_/phone08.png"/></li>
-                        <li><img src="img/_/phone09.png"/></li>
-                        <li><img src="img/_/phone10.png"/></li>
-                        <li><img src="img/_/phone11.png"/></li>
-                        <li><img src="img/_/phone12.png"/></li>
-                        <li><img src="img/_/phone13.png"/></li>
-                        <li><img src="img/_/phone14.png"/></li>
-                        <li><img src="img/_/phone05.png"/></li>
-                        <li><img src="img/_/phone06.png"/></li>
-                        <li><img src="img/_/phone07.png"/></li>
-                        <li><img src="img/_/phone02.png"/></li>
+                        <li ng-repeat="brand in resultMap.brandList">
+                            {{brand.text}}
+                        </li>
+
                     </ul>
                 </div>
                 <div class="ext">
@@ -209,40 +195,14 @@
                     <a href="javascript:void(0);">更多</a>
                 </div>
             </div>
-            <div class="type-wrap">
-                <div class="fl key">网络制式</div>
+            <div class="type-wrap" ng-repeat="spec in resultMap.specList">
+                <div class="fl key">{{spec.text}}</div>
                 <div class="fl value">
                     <ul class="type-list">
-                        <li>
-                            <a>GSM（移动/联通2G）</a>
+                        <li ng-repeat="pojo in spec.options">
+                            <a>{{pojo.optionName}}</a>
                         </li>
-                        <li>
-                            <a>电信2G</a>
-                        </li>
-                        <li>
-                            <a>电信3G</a>
-                        </li>
-                        <li>
-                            <a>移动3G</a>
-                        </li>
-                        <li>
-                            <a>联通3G</a>
-                        </li>
-                        <li>
-                            <a>联通4G</a>
-                        </li>
-                        <li>
-                            <a>电信3G</a>
-                        </li>
-                        <li>
-                            <a>移动3G</a>
-                        </li>
-                        <li>
-                            <a>联通3G</a>
-                        </li>
-                        <li>
-                            <a>联通4G</a>
-                        </li>
+
                     </ul>
                 </div>
                 <div class="fl ext"></div>
