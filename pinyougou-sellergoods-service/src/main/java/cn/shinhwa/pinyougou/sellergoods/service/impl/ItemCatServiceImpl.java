@@ -115,7 +115,7 @@ public class ItemCatServiceImpl implements ItemCatService {
         for (TbItemCat tbItemCat : list) {
             redisTemplate.boundHashOps("itemCat").put(tbItemCat.getName(),tbItemCat.getTypeId());
         }
-
+        System.out.println("品牌分类放入缓存");
         return itemCatMapper.selectByExample(example);
     }
 

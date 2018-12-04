@@ -143,10 +143,10 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         for (TbTypeTemplate typeTemplate : typeTemplateList) {
             List<Map> brandList = JSON.parseArray(typeTemplate.getBrandIds(), Map.class);
             redisTemplate.boundHashOps("brandList").put(typeTemplate.getId(), brandList);
-            System.out.println(brandList.toString());
+            System.out.println("品牌列表放入缓存");
             List<Map> specList = findSpecList(typeTemplate.getId());
-            System.out.println(specList.toString());
             redisTemplate.boundHashOps("specList").put(typeTemplate.getId(), specList);
+            System.out.println("规格列表放入缓存");
         }
     }
 
