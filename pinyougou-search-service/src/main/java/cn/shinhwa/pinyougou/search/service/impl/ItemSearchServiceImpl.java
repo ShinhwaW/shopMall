@@ -36,8 +36,13 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //查询商品分类
         map.put("categoryList", categoryList);
         //查询品牌和规格列表
-        if (categoryList.size()>0){
-            map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+        String category = (String) searchMap.get("category");
+        if (!category.equals("")) {
+            map.putAll(searchBrandAndSpecList(category));
+        } else {
+            if (categoryList.size() > 0) {
+                map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+            }
         }
         return map;
     }
@@ -48,13 +53,46 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
     private Map searchList(Map searchMap) {
         Map map = new HashMap();
+        //高亮选项初始化
         HighlightQuery highlightQuery = new SimpleHighlightQuery();
         HighlightOptions highlightOptions = new HighlightOptions().addField("item_title");
         highlightOptions.setSimplePrefix("<em style='color:red'>");
         highlightOptions.setSimplePostfix("</em>");
         highlightQuery.setHighlightOptions(highlightOptions);
+        //关键字查询
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         highlightQuery.addCriteria(criteria);
+
+        //1.2 按商品分类过滤
+        if (!"".equals(searchMap.get("category"))) {//如果用户选择了分类
+            FilterQuery filterQuery = new SimpleFilterQuery();
+            Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
+            filterQuery.addCriteria(filterCriteria);
+            highlightQuery.addFilterQuery(filterQuery);
+        }
+
+        //1.3 按品牌过滤
+        if (!"".equals(searchMap.get("brand"))) {//如果用户选择了品牌
+            FilterQuery filterQuery = new SimpleFilterQuery();
+            Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
+            filterQuery.addCriteria(filterCriteria);
+            highlightQuery.addFilterQuery(filterQuery);
+        }
+        //1.4 按规格过滤
+        if (searchMap.get("spec") != null) {
+            Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
+            for (String key : specMap.keySet()) {
+
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria filterCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
+                filterQuery.addCriteria(filterCriteria);
+                highlightQuery.addFilterQuery(filterQuery);
+
+            }
+
+        }
+
+        //**************** 获取高亮结果集 ****************
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(highlightQuery, TbItem.class);
         for (HighlightEntry<TbItem> h : page.getHighlighted()) {
             TbItem item = h.getEntity();
@@ -94,11 +132,11 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     private Map searchBrandAndSpecList(String category) {
         Map map = new HashMap();
         Long typeId = (Long) redisTemplate.boundHashOps("itemCat").get(category);
-        if (typeId != null){
+        if (typeId != null) {
             List brandList = (List) redisTemplate.boundHashOps("brandList").get(typeId);
-            map.put("brandList",brandList);
+            map.put("brandList", brandList);
             List specList = (List) redisTemplate.boundHashOps("specList").get(typeId);
-            map.put("specList",specList);
+            map.put("specList", specList);
         }
         return map;
     }
