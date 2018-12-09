@@ -1,5 +1,6 @@
 package cn.shinhwa.pinyougou.manager.controller;
 
+import cn.shinhwa.pinyougou.page.service.ItemPageService;
 import cn.shinhwa.pinyougou.pojo.TbGoods;
 import cn.shinhwa.pinyougou.pojo.TbItem;
 import cn.shinhwa.pinyougou.pojogroup.Goods;
@@ -145,6 +146,12 @@ public class GoodsController {
                 } else {
                     System.out.println("没有明细数据");
                 }
+
+                //静态页生成
+                for (Long goodsId : ids) {
+                    itemPageService.genItemHtml(goodsId);
+                }
+
             }
             return new Result(true, "成功");
         } catch (Exception e) {
@@ -153,5 +160,12 @@ public class GoodsController {
         }
     }
 
+    @Reference
+    private ItemPageService itemPageService;
+
+    @RequestMapping("/genHtml")
+    public void genHtml(Long goodsId) {
+        itemPageService.genItemHtml(goodsId);
+    }
 
 }
