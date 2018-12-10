@@ -9,13 +9,14 @@ import cn.shinhwa.pinyougou.pojo.TbGoods;
 import cn.shinhwa.pinyougou.pojo.TbGoodsDesc;
 import cn.shinhwa.pinyougou.pojo.TbItem;
 import cn.shinhwa.pinyougou.pojo.TbItemExample;
-import com.alibaba.dubbo.config.annotation.Service;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -44,7 +45,6 @@ public class ItemPageServiceImpl implements ItemPageService {
     private TbItemMapper itemMapper;
 
 
-
     @Override
     public boolean genItemHtml(Long goodsId) {
 
@@ -68,14 +68,13 @@ public class ItemPageServiceImpl implements ItemPageService {
             dataModel.put("itemCat3", itemCat3);
 
             //4.SKU列表
-            TbItemExample example=new TbItemExample();
+            TbItemExample example = new TbItemExample();
             TbItemExample.Criteria criteria = example.createCriteria();
             criteria.andStatusEqualTo("1");//状态为有效
             criteria.andGoodsIdEqualTo(goodsId);//指定SPU ID
             example.setOrderByClause("is_default desc");//按照状态降序，保证第一个为默认
             List<TbItem> itemList = itemMapper.selectByExample(example);
             dataModel.put("itemList", itemList);
-
 
 
             Writer out = new FileWriter(pageDir + goodsId + ".html");
@@ -87,6 +86,20 @@ public class ItemPageServiceImpl implements ItemPageService {
             return false;
         }
 
+
+    }
+
+    @Override
+    public boolean deleteItemHtml(Long[] goodsIds) {
+        try {
+            for (Long goodsId : goodsIds) {
+                new File(pageDir + goodsId + ".html").delete();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
     }
 }
